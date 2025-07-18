@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Todos from './components/Todos.jsx';
+import TodoForm from './components/TodoForm.jsx';
 
 function App() {
   const [todos, setTodos] = useState([
@@ -32,16 +33,32 @@ function App() {
     setTodos(updatedTodos) // Mengupdate state todos dengan array yang sudah dimodifikasi. Ini akan memicu re-render komponen
   }
 
-const toggleDeleted = (todoId) => {
-  const updatedTodos = todos.filter((todo) => { // Membuat array baru yang berisi semua todo KECUALI yang memiliki ID yang sama dengan todoId
-    return todo.id !== todoId // Hanya keep todo yang ID-nya TIDAK sama dengan yang ingin dihapus
-    // Filter akan cek setiap todo:
-    // todo.id: 1 !== 2 → true (keep)
-    // todo.id: 2 !== 2 → false (remove)
-    // todo.id: 3 !== 2 → true (keep)
-  })
-  setTodos(updatedTodos)
-}
+  const toggleDeleted = (todoId) => {
+    const updatedTodos = todos.filter((todo) => { // Membuat array baru yang berisi semua todo KECUALI yang memiliki ID yang sama dengan todoId
+      return todo.id !== todoId // Hanya keep todo yang ID-nya TIDAK sama dengan yang ingin dihapus
+      // Filter akan cek setiap todo:
+      // todo.id: 1 !== 2 → true (keep)
+      // todo.id: 2 !== 2 → false (remove)
+      // todo.id: 3 !== 2 → true (keep)
+    })
+    setTodos(updatedTodos)
+  }
+
+  const addTodo = (todoTitle) => {
+    if (todoTitle === '') {
+      return // validasi jika ternyata tidak ada yang diketikkan sebagai title
+    }
+
+    const newTodo = { // Buat data newTodo menggunakan nilai dari todoTitle
+      id: todos.length + 1,
+      title: todoTitle,
+      completed: false,
+    }
+  
+    const updateTodos = todos.concat(newTodo)
+    setTodos(updateTodos)
+  }
+
 
   return (
     <>
@@ -50,6 +67,7 @@ const toggleDeleted = (todoId) => {
           My Todo List
         </h1>
         <Todos Mytodos={todos} MytoggleCompleted={toggleCompleted} MytoggleDeleted={toggleDeleted}/>
+        <TodoForm addTodo={addTodo}/>
       </div>
     </>
   )
