@@ -20,15 +20,28 @@ function App() {
     } 
   ])
 
-  const toggleCompleted = (todoId) => {
-    const updatedTodos = todos.map((todo) => {
-      if (todo.id === todoId) {
+  const toggleCompleted = (todoId) => { // 'todoId' adalah ID dari todo yang ingin diubah statusnya. ID ini akan dikirim dari komponen 'TodoItem' ketika checkbox diklik
+    const updatedTodos = todos.map((todo) => { // Iterasi melalui setiap todo dalam array
+      if (todo.id === todoId) { // Cek apakah ID todo saat ini sama dengan ID yang dikirim
         todo.completed = !todo.completed
+        // Jika false → menjadi true (coret/selesai)
+        // Jika true → menjadi false
       }
-      return todo
+      return todo // Kembalikan todo (baik yang diubah maupun yang tidak)
     })
-    setTodos(updatedTodos)
+    setTodos(updatedTodos) // Mengupdate state todos dengan array yang sudah dimodifikasi. Ini akan memicu re-render komponen
   }
+
+const toggleDeleted = (todoId) => {
+  const updatedTodos = todos.filter((todo) => { // Membuat array baru yang berisi semua todo KECUALI yang memiliki ID yang sama dengan todoId
+    return todo.id !== todoId // Hanya keep todo yang ID-nya TIDAK sama dengan yang ingin dihapus
+    // Filter akan cek setiap todo:
+    // todo.id: 1 !== 2 → true (keep)
+    // todo.id: 2 !== 2 → false (remove)
+    // todo.id: 3 !== 2 → true (keep)
+  })
+  setTodos(updatedTodos)
+}
 
   return (
     <>
@@ -36,7 +49,7 @@ function App() {
         <h1 style={styles.title}>
           My Todo List
         </h1>
-        <Todos Mytodos={todos} MytoggleCompleted={toggleCompleted}/>
+        <Todos Mytodos={todos} MytoggleCompleted={toggleCompleted} MytoggleDeleted={toggleDeleted}/>
       </div>
     </>
   )
