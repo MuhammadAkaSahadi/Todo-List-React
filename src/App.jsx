@@ -1,6 +1,8 @@
-import { useState } from 'react'
+import { useState, createContext } from 'react'
 import Todos from './components/Todos.jsx';
 import TodoForm from './components/TodoForm.jsx';
+
+export const TodoContext = createContext()
 
 function App() {
   const [todos, setTodos] = useState([
@@ -21,7 +23,7 @@ function App() {
     } 
   ])
 
-  const toggleCompleted = (todoId) => { // 'todoId' adalah ID dari todo yang ingin diubah statusnya. ID ini akan dikirim dari komponen 'TodoItem' ketika checkbox diklik
+  const MytoggleIsCompleted = (todoId) => { // 'todoId' adalah ID dari todo yang ingin diubah statusnya. ID ini akan dikirim dari komponen 'TodoItem' ketika checkbox diklik
     const updatedTodos = todos.map((todo) => { // Iterasi melalui setiap todo dalam array
       if (todo.id === todoId) { // Cek apakah ID todo saat ini sama dengan ID yang dikirim
         todo.completed = !todo.completed
@@ -33,7 +35,7 @@ function App() {
     setTodos(updatedTodos) // Mengupdate state todos dengan array yang sudah dimodifikasi. Ini akan memicu re-render komponen
   }
 
-  const toggleDeleted = (todoId) => {
+  const MytoggleIsDeleted = (todoId) => {
     const updatedTodos = todos.filter((todo) => { // Membuat array baru yang berisi semua todo KECUALI yang memiliki ID yang sama dengan todoId
       return todo.id !== todoId // Hanya keep todo yang ID-nya TIDAK sama dengan yang ingin dihapus
       // Filter akan cek setiap todo:
@@ -61,15 +63,15 @@ function App() {
 
 
   return (
-    <>
+    <TodoContext.Provider value={{MytoggleIsCompleted, MytoggleIsDeleted}}>
       <div style={styles.container}>
         <h1 style={styles.title}>
           My Todo List
         </h1>
-        <Todos Mytodos={todos} MytoggleCompleted={toggleCompleted} MytoggleDeleted={toggleDeleted}/>
+        <Todos Mytodos={todos}/>
         <TodoForm addTodo={addTodo}/>
       </div>
-    </>
+    </TodoContext.Provider>
   )
 }
 

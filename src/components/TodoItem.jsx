@@ -1,4 +1,9 @@
-const TodoItem = ({ MytodoList , MytoggleIsCompleted, MytoggleIsDeleted}) => { // Todo disini diambil dari nama props todo
+import { useContext } from "react"
+import { TodoContext } from "../App"
+
+const TodoItem = ({ MytodoList}) => { // Todo disini diambil dari nama props todo
+    const {MytoggleIsCompleted, MytoggleIsDeleted} = useContext(TodoContext)
+    
     const getTodoTitleStyle = () => {
         if (MytodoList.completed === true) {
             return { textDecoration: 'line-through' }
